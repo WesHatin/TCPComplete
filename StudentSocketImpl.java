@@ -205,9 +205,15 @@ private synchronized void cancelPacketTimer(){
 	int i;
 	if(state != CLOSING){
 		for (i=0; i<ackNum; i++){
-			timerList.get(i).cancel();
-			timerList.remove(i);
-			packetList.remove(i);
+			if (timerList.containsKey(i)){
+				timerList.get(i).cancel();
+				timerList.remove(i);
+			}
+			
+			if (packetList.containsKey(i)){
+				packetList.remove(i);
+			}
+			
 		}
 		
 	}
@@ -381,8 +387,6 @@ private synchronized void cancelPacketTimer(){
 	changeToState(LISTEN);
 
 	D.registerListeningSocket (localport, this);
-
-	seqNum = 10000;
 
 	try{
 		this.wait();
