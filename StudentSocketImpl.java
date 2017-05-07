@@ -54,6 +54,7 @@ class StudentSocketImpl extends BaseSocketImpl {
 	ackNum = -1;
 	timerList = new Hashtable<Integer, TCPTimerTask>();
 	packetList = new Hashtable<Integer, TCPPacket>();
+	initBuffers();
   }
 
   private String stateString(int inState){
@@ -139,7 +140,8 @@ class StudentSocketImpl extends BaseSocketImpl {
    * @param length number of bytes to copy 
    */
   synchronized void dataFromApp(byte[] buffer, int length) {
-	  
+	  sendBuffer.append(buffer, 8, length);
+	  sendData(sendBuffer);
   }
   
   /**
@@ -147,8 +149,12 @@ class StudentSocketImpl extends BaseSocketImpl {
    * @param buffer
    * @param length
    */
-  synchronized void sendData(byte[] buffer, int length) {
-	  
+  synchronized void sendData(InfiniteBuffer buffer) {
+	  byte [] printarray = new byte [buffer.getBufferSize()];
+	  buffer.copyOut(printarray, 0, buffer.getBufferSize());
+	  for (int i=0; i < printarray.length; i++){
+		  System.out.println(printarray[i]);
+	  }
   }
 
 private synchronized void sendPacket(TCPPacket inPacket, boolean resend){
@@ -276,22 +282,22 @@ private synchronized void cancelPacketTimer(TCPPacket p){
 
 		if(state == SYN_RCVD){
 			//server state
-			cancelPacketTimer();
+			cancelPacketTimer(p);
 			changeToState(ESTABLISHED);
 		}
 		else if(state == FIN_WAIT_1){
 			//client state
-			cancelPacketTimer();
+			cancelPacketTimer(p);
 			changeToState(FIN_WAIT_2);
 		}
 		else if(state == LAST_ACK){
 			//server state
-			cancelPacketTimer();
+			cancelPacketTimer(p);
 			changeToState(TIME_WAIT);
 		}
 		else if(state == CLOSING){
 			//client or server state
-			cancelPacketTimer();
+			cancelPacketTimer(p);
 			changeToState(TIME_WAIT);
 		}
 	}
