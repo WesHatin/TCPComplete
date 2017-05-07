@@ -99,6 +99,7 @@ class StudentSocketImpl extends BaseSocketImpl {
   private synchronized void  changeToState(int newState) {
 	  System.out.println("!!! " + stateString(state) + "->" + stateString(newState));
 	  state = newState;
+	  System.out.println(state);
 	  
 	  if (newState == CLOSE_WAIT && wantsToClose && !finSent) {
 		  try {
@@ -140,6 +141,7 @@ class StudentSocketImpl extends BaseSocketImpl {
    * @param length number of bytes to copy 
    */
   synchronized void dataFromApp(byte[] buffer, int length) {
+	  System.out.println("asdfasdfasdf");
 	  //sendBuffer.append(buffer, 0, length);
 	  //sendData(sendBuffer);
   }
@@ -242,6 +244,8 @@ private synchronized void cancelPacketTimer(){
 	this.port = port;
 
 	D.registerConnection(address, localport, port, this);
+	
+	seqNum = 100;
 
 	TCPPacket synPacket = new TCPPacket(localport, port, seqNum, ackNum, false, true, false, 1, null);
 	changeToState(SYN_SENT);
@@ -386,6 +390,8 @@ private synchronized void cancelPacketTimer(){
 	changeToState(LISTEN);
 
 	D.registerListeningSocket (localport, this);
+	
+	seqNum = 1000;
 
 	try{
 		this.wait();
