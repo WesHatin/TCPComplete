@@ -122,7 +122,6 @@ class StudentSocketImpl extends BaseSocketImpl {
   private synchronized void  changeToState(int newState) {
 	  System.out.println("!!! " + stateString(state) + "->" + stateString(newState));
 	  state = newState;
-	  System.out.println(state);
 	  
 	  if (newState == CLOSE_WAIT && wantsToClose && !finSent) {
 		  try {
@@ -164,7 +163,7 @@ class StudentSocketImpl extends BaseSocketImpl {
    * @param length number of bytes to copy 
    */
   synchronized void dataFromApp(byte[] buffer, int length) {
-	  System.out.println("asdfasdfasdf");
+	  System.out.println("send test");
 	  sendBuffer.append(buffer, 0, length);
 	  sendData(sendBuffer);
   }
