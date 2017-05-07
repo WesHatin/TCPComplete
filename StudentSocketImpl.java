@@ -199,12 +199,12 @@ private synchronized void incrementCounters(TCPPacket p){
 		seqNum = p.ackNum;
 }
 
-private synchronized void cancelPacketTimer(TCPPacket p){
+private synchronized void cancelPacketTimer(){
 	//must be called before changeToState is called!!!
 
 	int i;
 	if(state != CLOSING){
-		for (i=0; i<p.ackNum; i++){
+		for (i=0; i<ackNum; i++){
 			timerList.get(i).cancel();
 			timerList.remove(i);
 			packetList.remove(i);
@@ -260,7 +260,7 @@ private synchronized void cancelPacketTimer(TCPPacket p){
 		if(state == SYN_SENT){
 			//client state
 			incrementCounters(p);
-			cancelPacketTimer(p);
+			cancelPacketTimer();
 			TCPPacket ackPacket = new TCPPacket(localport, port, seqNum, ackNum, true, false, false, 1, null);
 			changeToState(ESTABLISHED);
 			sendPacket(ackPacket, false);
@@ -282,22 +282,22 @@ private synchronized void cancelPacketTimer(TCPPacket p){
 
 		if(state == SYN_RCVD){
 			//server state
-			cancelPacketTimer(p);
+			cancelPacketTimer();
 			changeToState(ESTABLISHED);
 		}
 		else if(state == FIN_WAIT_1){
 			//client state
-			cancelPacketTimer(p);
+			cancelPacketTimer();
 			changeToState(FIN_WAIT_2);
 		}
 		else if(state == LAST_ACK){
 			//server state
-			cancelPacketTimer(p);
+			cancelPacketTimer();
 			changeToState(TIME_WAIT);
 		}
 		else if(state == CLOSING){
 			//client or server state
-			cancelPacketTimer(p);
+			cancelPacketTimer();
 			changeToState(TIME_WAIT);
 		}
 	}
