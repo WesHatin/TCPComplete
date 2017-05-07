@@ -382,8 +382,6 @@ private synchronized void cancelPacketTimer(){
 
 	D.registerListeningSocket (localport, this);
 
-	seqNum = 10000;
-
 	try{
 		this.wait();
 	}
