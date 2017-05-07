@@ -167,9 +167,9 @@ private synchronized void sendPacket(TCPPacket inPacket, boolean resend){
 
 		//only do timers for syns, syn-acks, and fins
 		if(inPacket.synFlag == true || inPacket.finFlag == true){
-			System.out.println("creating new TimerTask at state " + stateString(state));
-			timerList.put(inPacket.seqNum,createTimerTask(1000, inPacket));
-			packetList.put(inPacket.seqNum, inPacket);
+			System.out.println("creating new TimerTastk at state " + stateString(state));
+			timerList.put(new Integer(state),createTimerTask(1000, inPacket));
+			packetList.put(new Integer(state), inPacket);
 		}
 	}
 	else{ //the packet is for resending, and requires the original state as the key
