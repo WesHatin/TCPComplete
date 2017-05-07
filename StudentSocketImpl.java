@@ -54,6 +54,29 @@ class StudentSocketImpl extends BaseSocketImpl {
 	ackNum = -1;
 	timerList = new Hashtable<Integer, TCPTimerTask>();
 	packetList = new Hashtable<Integer, TCPPacket>();
+	
+	this.D = D;
+
+    try {
+      pipeAppToSocket = new PipedInputStream();
+      pipeSocketToApp = new PipedOutputStream();
+      
+      appIS = new PipedInputStream(pipeSocketToApp);
+      appOS = new PipedOutputStream(pipeAppToSocket);
+    }
+    catch(IOException e){
+      System.err.println("unable to create piped sockets");
+      System.exit(1);
+    }
+
+
+    initBuffers();
+
+    reader = new SocketReader(pipeAppToSocket, this);
+    reader.start();
+
+    writer = new SocketWriter(pipeSocketToApp, this);
+    writer.start();
 	initBuffers();
   }
 
