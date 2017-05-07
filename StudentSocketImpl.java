@@ -243,7 +243,6 @@ private synchronized void cancelPacketTimer(){
 
 	D.registerConnection(address, localport, port, this);
 
-	seqNum = 100;
 	TCPPacket synPacket = new TCPPacket(localport, port, seqNum, ackNum, false, true, false, 1, null);
 	changeToState(SYN_SENT);
 	sendPacket(synPacket, false);
