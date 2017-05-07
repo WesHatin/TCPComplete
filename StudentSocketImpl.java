@@ -140,8 +140,8 @@ class StudentSocketImpl extends BaseSocketImpl {
    * @param length number of bytes to copy 
    */
   synchronized void dataFromApp(byte[] buffer, int length) {
-	  sendBuffer.append(buffer, 8, length);
-	  sendData(sendBuffer);
+	  //sendBuffer.append(buffer, 0, length);
+	  //sendData(sendBuffer);
   }
   
   /**
@@ -167,7 +167,7 @@ private synchronized void sendPacket(TCPPacket inPacket, boolean resend){
 
 		//only do timers for syns, syn-acks, and fins
 		if(inPacket.synFlag == true || inPacket.finFlag == true){
-			System.out.println("creating new TimerTastk at state " + stateString(state));
+			System.out.println("creating new TimerTask at state " + stateString(state));
 			timerList.put(new Integer(state),createTimerTask(1000, inPacket));
 			packetList.put(new Integer(state), inPacket);
 		}
