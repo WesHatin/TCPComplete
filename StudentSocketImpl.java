@@ -116,8 +116,8 @@ class StudentSocketImpl extends BaseSocketImpl {
    * initialize buffers and set up sequence numbers
    */
   private void initBuffers() {
-	  sendBuffer = new InfiniteBuffer(0);
-	  recvBuffer = new InfiniteBuffer(0);
+	  sendBuffer = new InfiniteBuffer(10000);
+	  recvBuffer = new InfiniteBuffer(10000);
   }
   
   /**
@@ -142,8 +142,8 @@ class StudentSocketImpl extends BaseSocketImpl {
    */
   synchronized void dataFromApp(byte[] buffer, int length) {
 	  System.out.println("asdfasdfasdf");
-	  //sendBuffer.append(buffer, 0, length);
-	  //sendData(sendBuffer);
+	  sendBuffer.append(buffer, 0, length);
+	  sendData(sendBuffer);
   }
   
   /**
